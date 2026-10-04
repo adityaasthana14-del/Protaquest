@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ProtaQuest — the journey to become the protagonist of your life</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1F8; --panel:#FFFFFF; --panel2:#E3E8F4; --ink:#17203A; --muted:#5B6685;
+  --gold:#C98A12; --gold-soft:#F6E3B8; --mint:#1E9A78; --mint-soft:#D3F1E6; --coral:#D2553A; --coral-soft:#F9DCD3;
+  --line:#CDD5E8; --sky:#3A5BB8;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141B33; --panel:#1E2747; --panel2:#28335A; --ink:#EDF0FA; --muted:#9EA9CA;
+    --gold:#F2B544; --gold-soft:#3D3522; --mint:#5FD0AC; --mint-soft:#1E3D3C; --coral:#F2805F; --coral-soft:#45293A;
+    --line:#33406B; --sky:#8FA8F0;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141B33; --panel:#1E2747; --panel2:#28335A; --ink:#EDF0FA; --muted:#9EA9CA;
+  --gold:#F2B544; --gold-soft:#3D3522; --mint:#5FD0AC; --mint-soft:#1E3D3C; --coral:#F2805F; --coral-soft:#45293A;
+  --line:#33406B; --sky:#8FA8F0;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px;border-radius:6px}
+.wrap{max-width:720px;margin:0 auto;padding:20px 18px 120px}
+.muted{color:var(--muted)}
+.hidden{display:none!important}
+
+/* Onboarding */
+.intro h1{font-size:clamp(2.4rem,8vw,3.6rem);font-weight:800;letter-spacing:-.02em;margin:28px 0 8px}
+.intro .tag{font-size:1.15rem;color:var(--muted);max-width:34ch;margin:0 0 28px}
+.field{margin:0 0 22px}
+.field label{display:block;font-weight:700;margin-bottom:8px}
+.field .hint{font-size:.9rem;color:var(--muted);margin:-4px 0 8px}
+input[type=text],input[type=number],input[type=date],textarea,select{
+  width:100%;padding:12px 14px;background:var(--panel);border:1.5px solid var(--line);border-radius:12px}
+textarea{min-height:84px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--panel)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn{padding:13px 22px;border-radius:12px;border:0;background:var(--ink);color:var(--bg);font-weight:700}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.gold{background:var(--gold);color:#1a1405}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+
+/* Hero: the chapter */
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.brand{font-family:var(--display);font-weight:800;font-size:1.2rem}
+.iconbtn{background:none;border:1.5px solid var(--line);border-radius:10px;padding:6px 10px;color:var(--muted)}
+.chapter{background:var(--panel);border-radius:22px;padding:24px 22px;position:relative;overflow:hidden}
+.chapter .who{color:var(--muted);margin:0 0 6px}
+.chapter h2{font-size:clamp(1.9rem,6.5vw,2.7rem);font-weight:800;letter-spacing:-.015em}
+.chapter .daynum{font-size:clamp(5rem,22vw,8rem);font-family:var(--display);font-weight:800;line-height:.9;color:var(--gold);margin:14px 0 4px;letter-spacing:-.04em}
+.chapter .daylbl{font-weight:700}
+.lvl{margin-top:20px}
+.lvl .bar{height:12px;border-radius:99px;background:var(--panel2);overflow:hidden;margin-top:8px}
+.lvl .fill{height:100%;background:var(--gold);border-radius:99px;transition:width .6s ease}
+.lvl .meta{display:flex;justify-content:space-between;font-size:.92rem;color:var(--muted);margin-top:6px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.fact{background:var(--panel);border-radius:16px;padding:14px}
+.fact b{display:block;font-family:var(--display);font-size:1.45rem}
+.fact span{font-size:.88rem;color:var(--muted)}
+@media (max-width:460px){.facts{grid-template-columns:1fr 1fr}.fact:last-child{grid-column:span 2}}
+
+/* Tabs */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--panel);border-top:1px solid var(--line);
+  display:flex;justify-content:center;gap:4px;padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));z-index:5}
+nav.tabs button{flex:1;max-width:150px;background:none;border:0;border-radius:12px;padding:8px 4px;color:var(--muted);font-weight:700;font-size:.92rem}
+nav.tabs button[aria-selected="true"]{background:var(--panel2);color:var(--ink)}
+nav.tabs .ico{display:block;font-size:1.25rem}
+
+section.view{margin-top:22px}
+section.view > h3{font-size:1.4rem;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 16px}
+
+/* Timeline */
+.path{list-style:none;margin:0;padding:0;position:relative}
+.path::before{content:"";position:absolute;left:17px;top:8px;bottom:8px;width:3px;background:var(--line);border-radius:3px}
+.path li{position:relative;padding:0 0 22px 52px}
+.path .dot{position:absolute;left:6px;top:2px;width:25px;height:25px;border-radius:50%;background:var(--panel2);border:3px solid var(--line);display:grid;place-items:center;font-size:.75rem;font-weight:700}
+.path li.done .dot{background:var(--mint);border-color:var(--mint);color:#fff}
+.path li.now .dot{background:var(--gold);border-color:var(--gold);color:#1a1405}
+.path h4{margin:0;font-family:var(--display);font-size:1.12rem}
+.path p{margin:4px 0 0;color:var(--muted)}
+.path li.now p{color:var(--ink)}
+
+/* Cards */
+.card{background:var(--panel);border-radius:18px;padding:18px;margin-bottom:14px}
+.guide-note{border-left:4px solid var(--gold);background:var(--panel);border-radius:4px 18px 18px 4px;padding:16px 18px;margin-bottom:14px;white-space:pre-wrap}
+.guide-note .from{font-family:var(--display);font-weight:700;margin-bottom:6px;display:block}
+.moods{display:flex;gap:8px;flex-wrap:wrap}
+.mood{font-size:1.6rem;width:54px;height:54px;border-radius:14px;border:1.5px solid var(--line);background:var(--panel)}
+.mood[aria-pressed="true"]{border-color:var(--gold);background:var(--gold-soft)}
+input[type=range]{width:100%;accent-color:var(--gold)}
+.quest{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.quest:last-child{border-bottom:0}
+.quest input{width:22px;height:22px;accent-color:var(--mint)}
+.quest .xp{margin-left:auto;font-weight:700;color:var(--gold);font-size:.9rem;white-space:nowrap}
+.quest.checked span.t{text-decoration:line-through;color:var(--muted)}
+
+/* Chat */
+.chat{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.msg{max-width:85%;padding:11px 14px;border-radius:16px;white-space:pre-wrap}
+.msg.me{align-self:flex-end;background:var(--ink);color:var(--bg);border-bottom-right-radius:4px}
+.msg.ai{align-self:flex-start;background:var(--panel);border-bottom-left-radius:4px}
+.composer{display:flex;gap:8px}
+.composer input{flex:1}
+.starters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+
+/* SOS */
+.sos{position:fixed;right:18px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:6;background:var(--coral);color:#fff;border:0;border-radius:999px;padding:13px 20px;font-weight:700;box-shadow:0 6px 18px rgba(210,85,58,.35)}
+dialog{border:0;border-radius:22px;padding:24px;max-width:440px;width:calc(100% - 32px);background:var(--panel);color:var(--ink)}
+dialog::backdrop{background:rgba(10,14,30,.6)}
+.breath{width:150px;height:150px;border-radius:50%;margin:20px auto;background:var(--mint-soft);border:3px solid var(--mint);display:grid;place-items:center;font-family:var(--display);font-weight:700;transition:transform 4s ease-in-out}
+.breath.in{transform:scale(1.25)}
+@media (prefers-reduced-motion: reduce){.breath{transition:none}.lvl .fill{transition:none}}
+.toast{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:var(--gold);color:#1a1405;padding:10px 18px;border-radius:999px;font-weight:700;z-index:20}
+.relapse{background:var(--coral-soft);border-radius:18px;padding:18px;margin-top:6px}
+.small{font-size:.88rem}
+.cmp{display:flex;align-items:flex-end;gap:14px;height:120px;margin:12px 0 4px}
+.cmp div{flex:1;border-radius:10px 10px 0 0;display:flex;align-items:flex-end;justify-content:center;font-weight:700;padding-bottom:6px;font-size:.85rem}
+.footnote{font-size:.85rem;color:var(--muted);margin-top:24px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ONBOARDING -->
+  <div id="onboard" class="intro hidden">
+    <h1>ProtaQuest</h1>
+    <p class="tag">The journey to become the protagonist of your life. Track the habit you're quitting — and get a guide who walks it with you.</p>
+
+    <div class="field">
+      <label>What do you want to quit?</label>
+      <div class="chips" id="habitChips"></div>
+      <input type="text" id="habitCustom" class="hidden" placeholder="Name your habit" style="margin-top:10px">
+    </div>
+    <div class="field">
+      <label for="why">Why do you want to quit?</label>
+      <p class="hint">Your guide will remind you of this on hard days.</p>
+      <textarea id="why" placeholder="e.g. I want my mornings back, and I don't want my kids to pick this up."></textarea>
+    </div>
+    <div class="row">
+      <div class="field" style="flex:1;min-width:160px">
+        <label for="cost">Money spent per day (₹)</label>
+        <input type="number" id="cost" min="0" placeholder="150">
+      </div>
+      <div class="field" style="flex:1;min-width:160px">
+        <label for="start">Quit date</label>
+        <input type="date" id="start">
+      </div>
+    </div>
+    <div class="field">
+      <label for="hero">What should your guide call you?</label>
+      <input type="text" id="hero" placeholder="Your name">
+    </div>
+    <button class="btn gold" id="beginBtn">Begin my journey</button>
+    <p class="footnote">Pilot version. Your data stays in this browser.</p>
+  </div>
+
+  <!-- APP -->
+  <div id="app" class="hidden">
+    <div class="top">
+      <span class="brand">ProtaQuest</span>
+      <button class="iconbtn small" id="resetBtn">Start over</button>
+    </div>
+
+    <div class="chapter">
+      <p class="who" id="whoLine"></p>
+      <h2 id="chapterTitle"></h2>
+      <div class="daynum" id="dayNum">0</div>
+      <div class="daylbl" id="dayLbl">days free</div>
+      <div class="lvl">
+        <div class="row" style="justify-content:space-between"><b id="lvlName"></b><span class="muted small" id="xpText"></span></div>
+        <div class="bar"><div class="fill" id="xpFill" style="width:0"></div></div>
+      </div>
+    </div>
+    <div class="facts">
+      <div class="fact"><b id="saved">₹0</b><span>money saved</span></div>
+      <div class="fact"><b id="best">0</b><span>longest streak (days)</span></div>
+      <div class="fact"><b id="cravings">0</b><span>cravings beaten</span></div>
+    </div>
+
+    <!-- TODAY -->
+    <section class="view" id="v-today">
+      <h3>Today's check-in</h3>
+      <p class="sub">Tell your guide how today feels. It explains why, and what to expect next.</p>
+      <div class="card">
+        <label style="font-weight:700;display:block;margin-bottom:10px">How are you feeling?</label>
+        <div class="moods" id="moods"></div>
+        <label for="crave" style="font-weight:700;display:block;margin:18px 0 4px">Craving strength: <span id="craveVal">3</span>/10</label>
+        <input type="range" id="crave" min="0" max="10" value="3">
+        <label for="note" style="font-weight:700;display:block;margin:14px 0 6px">Anything on your mind? <span class="muted" style="font-weight:400">(optional)</span></label>
+        <textarea id="note" placeholder="Stressful day at work, friends were smoking at the chai stall…"></textarea>
+        <div class="row" style="margin-top:14px">
+          <button class="btn" id="checkinBtn">Check in · +20 XP</button>
+          <span class="muted small" id="checkinState"></span>
+        </div>
+      </div>
+      <div id="reflection"></div>
+
+      <h3 style="margin-top:26px">Side quests</h3>
+      <p class="sub">Small wins that make the main quest easier. They reset every day.</p>
+      <div class="card" id="quests"></div>
+
+      <div class="relapse">
+        <h3 style="font-size:1.15rem">Did you slip?</h3>
+        <p class="small" style="margin:6px 0 12px">A slip is part of most journeys, not the end of yours. Your XP and history stay — only the current streak restarts.</p>
+        <button class="btn ghost" id="slipBtn">I had a relapse</button>
+      </div>
+    </section>
+
+    <!-- JOURNEY -->
+    <section class="view hidden" id="v-journey">
+      <h3>Your journey map</h3>
+      <p class="sub">What many people go through at each stage — and where you are right now.</p>
+      <ol class="path" id="path"></ol>
+
+      <h3 style="margin-top:8px">You vs. the usual struggle</h3>
+      <p class="sub">Your average craving over the last 7 check-ins compared with a typical pattern at this stage.</p>
+      <div class="card">
+        <div class="cmp" id="cmp"></div>
+        <p class="small muted" id="cmpText"></p>
+      </div>
+      <h3 style="margin-top:20px">Check-in history</h3>
+      <div id="history" style="margin-top:10px"></div>
+    </section>
+
+    <!-- GUIDE -->
+    <section class="view hidden" id="v-guide">
+      <h3>Your guide</h3>
+      <p class="sub">Talk through a craving, a bad day, or what's coming next.</p>
+      <div class="starters" id="starters"></div>
+      <div class="chat" id="chat"></div>
+      <div class="composer">
+        <input type="text" id="chatIn" placeholder="Type to your guide…">
+        <button class="btn" id="sendBtn">Send</button>
+      </div>
+      <p class="footnote">Your guide is an AI coach, not a doctor or therapist. If you drink heavily every day or use other substances, talk to a doctor before stopping — some withdrawals need medical care. If you're in crisis in India, call Tele-MANAS 14416 or 112.</p>
+    </section>
+  </div>
+</div>
+
+<button class="sos hidden" id="sosBtn">Craving now</button>
+
+<nav class="tabs hidden" id="tabs" role="tablist">
+  <button role="tab" data-v="today" aria-selected="true"><span class="ico">☀️</span>Today</button>
+  <button role="tab" data-v="journey" aria-selected="false"><span class="ico">🗺️</span>Journey</button>
+  <button role="tab" data-v="guide" aria-selected="false"><span class="ico">🧭</span>Guide</button>
+</nav>
+
+<dialog id="sosDlg">
+  <h3>Ride the wave</h3>
+  <p class="muted small" style="margin:6px 0 0">Cravings usually peak and fade within 10–20 minutes. Breathe with the circle for one minute.</p>
+  <div class="breath" id="breath">Ready</div>
+  <div id="sosAI" class="small" style="white-space:pre-wrap;min-height:1.5em"></div>
+  <div class="row" style="margin-top:16px;justify-content:space-between">
+    <button class="btn ghost" id="sosClose">Close</button>
+    <button class="btn gold" id="sosWin">I beat it · +30 XP</button>
+  </div>
+</dialog>
+
+<dialog id="slipDlg">
+  <h3>It's okay. Let's look at it.</h3>
+  <p class="muted small" style="margin:6px 0 14px">What happened just before? Knowing the trigger is how the next streak lasts longer.</p>
+  <textarea id="slipNote" placeholder="I was stressed after the exam and everyone was going out…"></textarea>
+  <div id="slipAI" class="small" style="white-space:pre-wrap;margin-top:12px"></div>
+  <div class="row" style="margin-top:16px;justify-content:space-between">
+    <button class="btn ghost" id="slipCancel">Cancel</button>
+    <button class="btn" id="slipConfirm">Log it and restart · +10 XP</button>
+  </div>
+</dialog>
+
+<script>
+/* ---------- storage ---------- */
+const KEY = "protaquest:v1";
+function load(){ try{ const r = localStorage.getItem(KEY); return r ? JSON.parse(r) : null; }catch(e){ return null; } }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+let S = load();
+
+/* ---------- AI (sample capability) ---------- */
+let sample = null;
+(async () => {
+  try { if (window.claude && claude.use) sample = await claude.use("sample"); } catch(e){ sample = null; }
+})();
+
+const HABITS = ["Smoking","Alcohol","Social media scrolling","Junk food","Porn","Gaming","Sugar","Something else"];
+const MOODS = [["😣","awful"],["😕","low"],["😐","okay"],["🙂","good"],["😄","great"]];
+const TITLES = ["Newcomer","Wanderer","Challenger","Pathfinder","Hero","Protagonist","Legend"];
+const QUESTS = [
+  ["Read your 'why' out loud once",10],["Drink 8 glasses of water",10],["Walk for 15 minutes",15],
+  ["Tell one person about your journey",15],["Replace one trigger moment with something else",20],
+  ["Sleep before midnight",10],["Write 3 lines about how today went",10],["Do 10 slow breaths when an urge hits",10]
+];
+const STAGES = [
+  [0,"The decision","Day one. Urges come in waves; each one usually rises and passes within 10–20 minutes."],
+  [3,"The storm","For many people cravings, irritability and restlessness peak around days 2–4. This is the hardest stretch — it means change is happening."],
+  [7,"First chapter closed","Your triggers are now obvious: times, places, people, feelings. The habit still feels 'missing' from routines."],
+  [14,"New rhythm","Cravings get less frequent. Sleep, mood and energy often start settling."],
+  [30,"The turning point","The habit loop is weakening. Watch for the 'just once won't hurt' thought — it's the most common reason for slips here."],
+  [60,"New identity","You're starting to see yourself as someone who doesn't do this. Urges are rarer and weaker."],
+  [90,"Protagonist","Three months. The new behaviour is becoming automatic. Keep the tools that got you here."]
+];
+// typical craving level (0-10) by day — illustrative curve for the pilot
+function typicalCraving(d){ if(d<=1) return 6; if(d<=4) return 8; if(d<=7) return 6.5; if(d<=14) return 5; if(d<=30) return 3.5; if(d<=60) return 2.5; return 1.5; }
+
+const $ = id => document.getElementById(id);
+const DAY = 86400000;
+const todayStr = () => new Date().toISOString().slice(0,10);
+function days(){ return Math.max(0, Math.floor((Date.now() - new Date(S.streakStart).getTime())/DAY)); }
+function level(xp){ let l=1, need=100, acc=0; while(xp >= acc+need){ acc+=need; l++; need=Math.round(need*1.35); } return {l, into:xp-acc, need}; }
+function stageIdx(d){ let i=0; STAGES.forEach((s,k)=>{ if(d>=s[0]) i=k; }); return i; }
+function toast(t){ const el=document.createElement("div"); el.className="toast"; el.textContent=t; document.body.appendChild(el); setTimeout(()=>el.remove(),2200); }
+function addXP(n,label){ S.xp += n; save(); toast(`+${n} XP · ${label}`); render(); }
+
+/* ---------- onboarding ---------- */
+let pickedHabit = null;
+function buildOnboard(){
+  const box = $("habitChips"); box.innerHTML="";
+  HABITS.forEach(h=>{
+    const b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=h; b.setAttribute("aria-pressed","false");
+    b.onclick=()=>{ [...box.children].forEach(c=>c.setAttribute("aria-pressed","false")); b.setAttribute("aria-pressed","true"); pickedHabit=h;
+      $("habitCustom").classList.toggle("hidden", h!=="Something else"); };
+    box.appendChild(b);
+  });
+  $("start").value = todayStr();
+}
+$("beginBtn").onclick = ()=>{
+  let habit = pickedHabit==="Something else" ? $("habitCustom").value.trim() : pickedHabit;
+  if(!habit){ toast("Pick the habit you want to quit"); return; }
+  S = { habit, why:$("why").value.trim(), cost:Number($("cost").value)||0, quitDate:$("start").value||todayStr(),
+        streakStart:$("start").value||todayStr(), hero:$("hero").value.trim()||"Hero",
+        xp:0, best:0, cravingsBeaten:0, checkins:[], relapses:[], quests:{date:todayStr(),done:[]}, chat:[] };
+  save(); show();
+};
+$("resetBtn").onclick = ()=>{ if(confirm("Start over? This clears your journey in this browser.")){ try{localStorage.removeItem(KEY);}catch(e){} S=null; show(); } };
+
+/* ---------- render ---------- */
+function show(){
+  const has = !!S;
+  $("onboard").classList.toggle("hidden", has);
+  ["app","tabs","sosBtn"].forEach(id=>$(id).classList.toggle("hidden", !has));
+  if(!has){ buildOnboard(); return; }
+  if(S.quests.date!==todayStr()) S.quests={date:todayStr(),done:[]};
+  render();
+}
+function render(){
+  const d = days(), st = STAGES[stageIdx(d)], lv = level(S.xp);
+  S.best = Math.max(S.best, d);
+  $("whoLine").textContent = `${S.hero} · quitting ${S.habit.toLowerCase()}`;
+  $("chapterTitle").textContent = `Chapter ${stageIdx(d)+1}: ${st[1]}`;
+  $("dayNum").textContent = d;
+  $("dayLbl").textContent = d===1 ? "day free" : "days free";
+  $("lvlName").textContent = `Level ${lv.l} · ${TITLES[Math.min(lv.l-1,TITLES.length-1)]}`;
+  $("xpText").textContent = `${lv.into} / ${lv.need} XP`;
+  $("xpFill").style.width = Math.round(lv.into/lv.need*100)+"%";
+  const totalDays = Math.max(0, Math.floor((Date.now()-new Date(S.quitDate).getTime())/DAY)) - S.relapses.length;
+  $("saved").textContent = "₹"+Math.max(0,totalDays*S.cost).toLocaleString("en-IN");
+  $("best").textContent = S.best;
+  $("cravings").textContent = S.cravingsBeaten;
+  const did = S.checkins.find(c=>c.date===todayStr());
+  $("checkinBtn").disabled = !!did;
+  $("checkinState").textContent = did ? "Checked in today. Come back tomorrow." : "";
+  if(did && did.reflection && !$("reflection").innerHTML) $("reflection").innerHTML = noteHTML(did.reflection);
+  renderQuests(); renderPath(d); renderCmp(d); renderHistory(); save();
+}
+function noteHTML(t){ const e=document.createElement("div"); e.className="guide-note"; const f=document.createElement("span"); f.className="from"; f.textContent="Your guide"; e.appendChild(f); e.appendChild(document.createTextNode(t)); return e.outerHTML; }
+
+function renderQuests(){
+  const box=$("quests"); box.innerHTML="";
+  const seed = new Date().getDate();
+  const picks = [0,1,2].map(i=>QUESTS[(seed+i*3)%QUESTS.length]);
+  picks.forEach(([t,x])=>{
+    const done = S.quests.done.includes(t);
+    const lab=document.createElement("label"); lab.className="quest"+(done?" checked":"");
+    const cb=document.createElement("input"); cb.type="checkbox"; cb.checked=done; cb.disabled=done;
+    cb.onchange=()=>{ S.quests.done.push(t); addXP(x,"side quest"); };
+    const sp=document.createElement("span"); sp.className="t"; sp.textContent=t;
+    const xp=document.createElement("span"); xp.className="xp"; xp.textContent="+"+x+" XP";
+    lab.append(cb,sp,xp); box.appendChild(lab);
+  });
+}
+function renderPath(d){
+  const box=$("path"); box.innerHTML=""; const cur=stageIdx(d);
+  STAGES.forEach((s,i)=>{
+    const li=document.createElement("li"); li.className = i<cur?"done":(i===cur?"now":"");
+    li.innerHTML=`<span class="dot">${i<cur?"✓":""}</span><h4></h4><p></p>`;
+    li.querySelector("h4").textContent=`Day ${s[0]} · ${s[1]}${i===cur?" (you are here)":""}`;
+    li.querySelector("p").textContent=s[2];
+    box.appendChild(li);
+  });
+}
+function renderCmp(d){
+  const last = S.checkins.slice(-7);
+  const mine = last.length ? last.reduce((a,c)=>a+c.craving,0)/last.length : null;
+  const typ = typicalCraving(d);
+  const box=$("cmp"); box.innerHTML="";
+  [["You",mine,"var(--gold)"],["Typical",typ,"var(--panel2)"]].forEach(([n,v,c])=>{
+    const b=document.createElement("div"); b.style.background=c; b.style.height=((v??0)/10*100+8)+"%";
+    b.textContent = v==null ? n+": —" : `${n}: ${v.toFixed(1)}`; if(n==="You") b.style.color="#1a1405"; box.appendChild(b);
+  });
+  $("cmpText").textContent = mine==null ? "Check in a few times to see how you compare." :
+    mine < typ ? "You're handling cravings better than the usual pattern at this stage. Keep the tools that are working." :
+    "You're feeling it more than usual right now. That's common after stress or a slip — lean on the guide and the craving button.";
+}
+function renderHistory(){
+  const box=$("history"); box.innerHTML="";
+  const items=[...S.checkins.map(c=>({...c,t:"c"})),...S.relapses.map(r=>({...r,t:"r"}))].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,10);
+  if(!items.length){ box.innerHTML='<p class="muted">No check-ins yet. Your first one is on the Today tab.</p>'; return; }
+  items.forEach(i=>{
+    const p=document.createElement("div"); p.className="card small";
+    p.textContent = i.t==="c" ? `${i.date} · ${MOODS[i.mood][0]} ${MOODS[i.mood][1]} · craving ${i.craving}/10${i.note?" · "+i.note:""}`
+                              : `${i.date} · relapse logged${i.note?" · "+i.note:""}`;
+    if(i.t==="r") p.style.borderLeft="4px solid var(--coral)";
+    box.appendChild(p);
+  });
+}
+
+/* ---------- AI helpers ---------- */
+function context(){
+  const d=days(); const st=STAGES[stageIdx(d)];
+  return `You are "the Guide" inside ProtaQuest, an app that helps people quit a habit, framed as becoming the protagonist of their own life.
+User: ${S.hero}. Quitting: ${S.habit}. Their reason: "${S.why||"not given"}".
+Current streak: ${d} days (stage: ${st[1]} — ${st[2]}). Longest streak: ${S.best}. Relapses so far: ${S.relapses.length}. Cravings beaten: ${S.cravingsBeaten}.
+Recent check-ins: ${JSON.stringify(S.checkins.slice(-5).map(c=>({date:c.date,mood:MOODS[c.mood][1],craving:c.craving,note:c.note})))}
+Style: warm, direct, practical, like a wise friend who has been through it. Explain WHY they may feel this way at this stage, what the coming days usually look like, and 1–2 concrete things to do. Remind them of their reason when useful. If they write in Hinglish or Hindi, reply in the same. Keep it under 120 words, plain text, no markdown headers.
+Safety: you are not a doctor. If they mention heavy daily alcohol use or other substance dependence, advise speaking to a doctor before stopping abruptly. If they mention self-harm or feeling unsafe, gently encourage calling Tele-MANAS 14416 or 112 in India and reaching out to someone they trust.`;
+}
+function fallback(kind){
+  const d=days(), st=STAGES[stageIdx(d)];
+  if(kind==="relapse") return `A slip doesn't erase the ${S.best} days you proved you could do. Most people who quit for good had several restarts. Look at the trigger you wrote down — that's your plan for next time: when it shows up, do something different for 10 minutes. Remember why you started: ${S.why||"you wanted a better chapter"}.`;
+  if(kind==="sos") return `This urge will peak and pass. Breathe with the circle, drink some water, and change the room you're in. You've beaten ${S.cravingsBeaten} cravings already.`;
+  return `Day ${d}: ${st[2]} What you're feeling is normal for this stage. Today, notice when the urge shows up and what came right before it. ${S.why?"Remember: "+S.why:""}`;
+}
+async function ask(turns, onText){
+  if(!sample) return null;
+  try{ const r = await sample(turns,{modelTier:"quick",cache:false,onText:({text})=>onText&&onText(text)}); return r.text; }
+  catch(e){ if(e && e.text) return e.text; return null; }
+}
+
+/* ---------- check-in ---------- */
+let mood=2;
+(function(){ const box=$("moods"); MOODS.forEach(([e,n],i)=>{ const b=document.createElement("button"); b.type="button"; b.className="mood"; b.textContent=e; b.title=n; b.setAttribute("aria-label",n); b.setAttribute("aria-pressed", i===2?"true":"false");
+  b.onclick=()=>{ mood=i; [...box.children].forEach(c=>c.setAttribute("aria-pressed","false")); b.setAttribute("aria-pressed","true"); }; box.appendChild(b); }); })();
+$("crave").oninput=e=>$("craveVal").textContent=e.target.value;
+$("checkinBtn").onclick = async ()=>{
+  const c={date:todayStr(),mood,craving:Number($("crave").value),note:$("note").value.trim(),reflection:""};
+  S.checkins.push(c); addXP(20,"daily check-in");
+  const box=$("reflection"); box.innerHTML=noteHTML("Thinking…");
+  const prompt = context()+`\n\nToday's check-in: mood ${MOODS[mood][1]}, craving ${c.craving}/10${c.note?`, note: "${c.note}"`:""}. Reflect on how they feel today, why that is likely at day ${days()}, and what the next few days usually look like.`;
+  const el=box.firstChild;
+  const set=t=>{ el.lastChild.textContent=t; };
+  const out = await ask(prompt,set);
+  c.reflection = out || fallback("checkin"); set(c.reflection); save();
+};
+
+/* ---------- relapse ---------- */
+$("slipBtn").onclick=()=>{ $("slipNote").value=""; $("slipAI").textContent=""; $("slipConfirm").disabled=false; $("slipDlg").showModal(); };
+$("slipCancel").onclick=()=>$("slipDlg").close();
+$("slipConfirm").onclick=async ()=>{
+  $("slipConfirm").disabled=true;
+  const note=$("slipNote").value.trim();
+  S.best=Math.max(S.best,days());
+  S.relapses.push({date:todayStr(),note,streak:days()});
+  S.streakStart=todayStr(); S.xp+=10; save(); render();
+  $("slipAI").textContent="Thinking…";
+  const out=await ask(context()+`\n\nThey just relapsed after a ${S.relapses.at(-1).streak}-day streak. What happened: "${note||"not shared"}". Respond with compassion (no guilt), explain why slips happen, name the trigger, and give a concrete plan for the next time it appears.`, t=>$("slipAI").textContent=t);
+  $("slipAI").textContent = out || fallback("relapse");
+};
+
+/* ---------- SOS ---------- */
+let breathTimer=null;
+$("sosBtn").onclick=async ()=>{
+  $("sosDlg").showModal(); $("sosAI").textContent=""; $("sosWin").disabled=false;
+  const el=$("breath"); let n=0;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  clearInterval(breathTimer);
+  const step=()=>{ const inh = n%2===0; el.classList.toggle("in", inh && !reduce); el.textContent = inh?"Breathe in":"Breathe out"; n++; if(n>=16){ clearInterval(breathTimer); el.textContent="Well done"; el.classList.remove("in"); } };
+  step(); breathTimer=setInterval(step,4000);
+  $("sosAI").textContent="Your guide is writing…";
+  const out=await ask(context()+`\n\nThey pressed "Craving now" — an urge is happening right now. Give 3 short, immediate steps for the next 10 minutes. Under 60 words.`, t=>$("sosAI").textContent=t);
+  $("sosAI").textContent = out || fallback("sos");
+};
+$("sosClose").onclick=()=>{ clearInterval(breathTimer); $("sosDlg").close(); };
+$("sosWin").onclick=()=>{ $("sosWin").disabled=true; S.cravingsBeaten++; clearInterval(breathTimer); $("sosDlg").close(); addXP(30,"craving beaten"); };
+
+/* ---------- Guide chat ---------- */
+const STARTERS=["Why am I feeling so irritable today?","What will next week be like?","I'm at a party and everyone's doing it","How do I explain this to my friends?"];
+function renderChat(){
+  const box=$("chat"); box.innerHTML="";
+  if(!S.chat.length){ const m=document.createElement("div"); m.className="msg ai"; m.textContent=`Hi ${S.hero}. I'm your guide for quitting ${S.habit.toLowerCase()}. Ask me anything — how you feel, what's next, or what to do right now.`; box.appendChild(m); }
+  S.chat.forEach(t=>{ const m=document.createElement("div"); m.className="msg "+(t.role==="user"?"me":"ai"); m.textContent=t.content; box.appendChild(m); });
+}
+(function(){ const box=$("starters"); STARTERS.forEach(s=>{ const b=document.createElement("button"); b.className="chip small"; b.textContent=s; b.onclick=()=>{ $("chatIn").value=s; send(); }; box.appendChild(b); }); })();
+async function send(){
+  const txt=$("chatIn").value.trim(); if(!txt) return;
+  $("chatIn").value=""; $("sendBtn").disabled=true;
+  S.chat.push({role:"user",content:txt}); renderChat();
+  const m=document.createElement("div"); m.className="msg ai"; m.textContent="Thinking…"; $("chat").appendChild(m);
+  m.scrollIntoView({block:"end",behavior:"smooth"});
+  const hist=S.chat.slice(-10).map((t,i,a)=> i===0 && t.role==="user" ? t : t);
+  // first turn must be user; prepend context to the first user turn
+  let turns = hist[0].role==="user" ? hist.slice() : hist.slice(1);
+  turns = turns.map((t,i)=> i===0 ? {role:"user",content:context()+"\n\nConversation starts now. User says: "+t.content} : t);
+  const out = await ask(turns, t=>m.textContent=t);
+  const reply = out || "I can't reach the AI right now. Try the craving button for immediate help, or check in on the Today tab — your guide notes still work there.";
+  S.chat.push({role:"assistant",content:reply}); m.textContent=reply; save();
+  $("sendBtn").disabled=false;
+}
+$("sendBtn").onclick=send;
+$("chatIn").addEventListener("keydown",e=>{ if(e.key==="Enter") send(); });
+
+/* ---------- tabs ---------- */
+document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected","false"));
+  b.setAttribute("aria-selected","true");
+  ["today","journey","guide"].forEach(v=>$("v-"+v).classList.toggle("hidden", v!==b.dataset.v));
+  if(b.dataset.v==="guide") renderChat();
+  window.scrollTo({top:0});
+});
+
+show();
+</script>
+</body>
+</html>
